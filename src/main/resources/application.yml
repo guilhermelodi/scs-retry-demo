@@ -1,0 +1,19 @@
+spring:
+  application:
+    name: scs-retry-policy
+  cloud:
+    function:
+      definition: consumeOrderCreated
+    stream:
+      defaultBinder: kafka
+      bindings:
+        consumeOrderCreated-in-0:
+          destination: order-created
+          group: retry-policy-group
+          contentType: application/json
+      kafka:
+        binder:
+          brokers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+
+server:
+  port: ${SERVER_PORT:8081}
