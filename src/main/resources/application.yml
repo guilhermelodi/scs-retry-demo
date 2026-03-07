@@ -2,14 +2,11 @@ spring:
   application:
     name: scs-retry-demo
   cloud:
-    function:
-      definition: consumeOrderCreated
     stream:
       defaultBinder: kafka
       bindings:
-        consumeOrderCreated-in-0:
+        orderCreated-out-0:
           destination: order-created
-          group: retry-policy-group
           contentType: application/json
       kafka:
         binder:

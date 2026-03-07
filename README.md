@@ -24,25 +24,32 @@ Serviços disponíveis:
 
 Por padrão, a aplicação sobe na porta `8081` para não conflitar com o Kafka UI.
 
-## Consumo de mensagens
+## Publicação de mensagens
 
-A aplicação consome mensagens do tópico Kafka `order-created` no formato JSON com os campos:
+A aplicação expõe o endpoint `POST /orders`, que recebe um `OrderCreatedEvent` e publica o payload no tópico Kafka `order-created` usando um producer do Spring Cloud Stream.
+
+Payload esperado:
 
 - `id` (long)
 - `value` (integer)
 - `status` (string)
 
-A mensagem é desserializada para `OrderCreatedEvent` e os dados são registrados em log.
+Exemplo de requisição:
 
-Exemplo de payload:
-
-```json
-{
-  "id": 1,
-  "value": 250,
-  "status": "CREATED"
-}
+```bash
+curl -X POST http://localhost:8081/orders \
+  -H "Content-Type: application/json" \
+  -d '{
+    "id": 1,
+    "value": 250,
+    "status": "CREATED"
+  }'
 ```
+
+Retornos:
+
+- `202 Accepted`: mensagem enviada com sucesso.
+- `500 Internal Server Error`: falha ao publicar no broker.
 
 ## Configuração
 
