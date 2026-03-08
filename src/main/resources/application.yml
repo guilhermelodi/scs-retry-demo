@@ -5,7 +5,7 @@ spring:
     stream:
       defaultBinder: kafka
       bindings:
-        orderCreated-out-0:
+        order-created-out-0:
           destination: order-created
           contentType: application/json
       kafka:
