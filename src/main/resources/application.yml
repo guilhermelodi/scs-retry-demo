@@ -1,11 +1,15 @@
 spring:
   application:
     name: scs-retry-demo
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    listener:
+      missing-topics-fatal: false
   cloud:
     stream:
       defaultBinder: kafka
       bindings:
-        order-created-out-0:
+        orderCreatedProducer-out-0:
           destination: order-created
           contentType: application/json
       kafka:

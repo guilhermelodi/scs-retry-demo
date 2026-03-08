@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class OrderProducer {
 
-    private static final String OUTPUT_BINDING = "order-created-out-0";
+    private static final String OUTPUT_BINDING = "orderCreatedProducer-out-0";
 
     private final StreamBridge streamBridge;
 

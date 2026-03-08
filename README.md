@@ -14,7 +14,7 @@ Serviços disponíveis:
 - ZooKeeper: `localhost:2181`
 - Kafka UI: `http://localhost:8080`
 
-> O compose inclui um serviço `kafka-init` que cria o tópico `order-created`, pois o Kafka está com `KAFKA_AUTO_CREATE_TOPICS_ENABLE=false`.
+> O compose inclui um serviço `kafka-init` que cria os tópicos `order-created`, `order-created-retry` e `order-created-dlt`, pois o Kafka está com `KAFKA_AUTO_CREATE_TOPICS_ENABLE=false`.
 
 ## Executar aplicação
 
@@ -50,6 +50,19 @@ Retornos:
 
 - `202 Accepted`: mensagem enviada com sucesso.
 - `500 Internal Server Error`: falha ao publicar no broker.
+
+## Consumo com retry usando `@RetryableTopic`
+
+O consumo do tópico `order-created` é feito com `@KafkaListener` e o retry é controlado por `@RetryableTopic`:
+
+- Tentativa inicial + **3 retries** (`attempts=4`)
+- Backoff fixo de **30 segundos** entre retries
+- Reuso de um único tópico de retry (`order-created-retry`)
+- Mensagens esgotadas vão para `order-created-dlt`
+
+Essa abordagem remove a necessidade de orquestrar manualmente múltiplos consumidores/tópicos de retry na aplicação e mantém o comportamento durável no Kafka.
+
+Para simular falha, envie eventos com `status=ERROR`.
 
 ## Configuração
 
