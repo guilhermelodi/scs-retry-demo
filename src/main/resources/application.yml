@@ -2,11 +2,27 @@ spring:
   application:
     name: scs-retry-demo
   cloud:
+    function:
+      definition: orderCreatedConsumer;orderCreatedRetryConsumer
     stream:
       defaultBinder: kafka
       bindings:
-        order-created-out-0:
+        orderCreatedProducer-out-0:
           destination: order-created
+          contentType: application/json
+        orderCreatedConsumer-in-0:
+          destination: order-created
+          group: order-created-consumer-group
+          contentType: application/json
+        orderCreatedRetryProducer-out-0:
+          destination: order-created-retry
+          contentType: application/json
+        orderCreatedRetryConsumer-in-0:
+          destination: order-created-retry
+          group: order-created-retry-consumer-group
+          contentType: application/json
+        orderCreatedDltProducer-out-0:
+          destination: order-created-dlt
           contentType: application/json
       kafka:
         binder:
