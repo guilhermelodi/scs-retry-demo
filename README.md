@@ -14,7 +14,7 @@ Serviços disponíveis:
 - ZooKeeper: `localhost:2181`
 - Kafka UI: `http://localhost:8080`
 
-> O compose inclui um serviço `kafka-init` que cria o tópico `order-created`, pois o Kafka está com `KAFKA_AUTO_CREATE_TOPICS_ENABLE=false`.
+> O compose inclui um serviço `kafka-init` que cria os tópicos `order-created`, `order-created-retry` e `order-created-dlt`, pois o Kafka está com `KAFKA_AUTO_CREATE_TOPICS_ENABLE=false`.
 
 ## Executar aplicação
 
@@ -50,6 +50,22 @@ Retornos:
 
 - `202 Accepted`: mensagem enviada com sucesso.
 - `500 Internal Server Error`: falha ao publicar no broker.
+
+## Consumo com retry não blocante
+
+O projeto possui dois consumidores com Spring Cloud Stream:
+
+- `orderCreatedConsumer`: consome mensagens do tópico `order-created`.
+- `orderCreatedRetryConsumer`: consome mensagens do tópico `order-created-retry`.
+
+Fluxo de retry configurado:
+
+1. Falha no consumo inicial (`order-created`) envia para `order-created-retry` com header `x-retry-attempt=1`.
+2. O consumidor de retry agenda novo processamento após **30 segundos** (sem bloquear a thread de consumo).
+3. Em nova falha, a mensagem é reenviada para `order-created-retry` até completar **3 tentativas**.
+4. Ao exceder o limite, a mensagem é enviada para `order-created-dlt`.
+
+Para simular falha, envie eventos com `status=ERROR`.
 
 ## Configuração
 
