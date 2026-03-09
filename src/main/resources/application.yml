@@ -12,7 +12,7 @@ spring:
           contentType: application/json
         orderCreatedConsumer-in-0:
           destination: order-created
-          group: order-created-consumer-group
+          group: ${spring.application.name}
           contentType: application/json
           consumer:
             max-attempts: 4
