@@ -27,8 +27,7 @@ public class OrderCreatedConsumer {
             autoCreateTopics = "false"
     )
     @KafkaListener(
-            topics = "${spring.kafka.topic.order-created}",
-            groupId = "${spring.application.name}"
+            topics = "${spring.kafka.topic.order-created}"
     )
     public void onMessage(OrderCreatedEvent event) {
         log.info("Evento recebido para consumo: id={}, status={}, value={}",

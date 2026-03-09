@@ -3,6 +3,8 @@ spring:
     name: scs-retry-demo
   kafka:
     bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    consumer:
+      group-id: ${spring.application.name}
     topic:
       order-created: order-created
     listener:
