@@ -4,6 +4,8 @@ spring:
   kafka:
     bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
     consumer:
+      topic:
+        order-created: order-created
       auto-offset-reset: earliest
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
@@ -23,10 +25,3 @@ spring:
 
 server:
   port: ${SERVER_PORT:8081}
-
-app:
-  kafka:
-    consumer:
-      order-created:
-        topic: order-created
-        group-id: order-created-consumer

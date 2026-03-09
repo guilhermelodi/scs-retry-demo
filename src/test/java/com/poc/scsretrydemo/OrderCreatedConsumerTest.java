@@ -24,7 +24,7 @@ class OrderCreatedConsumerTest {
         assertThat(retryableTopic.dltTopicSuffix()).isEqualTo("-dlt");
 
         assertThat(kafkaListener).isNotNull();
-        assertThat(kafkaListener.topics()).containsExactly("${app.kafka.consumer.order-created.topic}");
-        assertThat(kafkaListener.groupId()).isEqualTo("${app.kafka.consumer.order-created.group-id}");
+        assertThat(kafkaListener.topics()).containsExactly("${spring.kafka.consumer.topic.order-created}");
+        assertThat(kafkaListener.groupId()).isEqualTo("${spring.application.name}");
     }
 }

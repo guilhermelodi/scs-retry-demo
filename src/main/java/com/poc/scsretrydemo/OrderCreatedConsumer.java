@@ -20,8 +20,8 @@ public class OrderCreatedConsumer {
             sameIntervalTopicReuseStrategy = SameIntervalTopicReuseStrategy.SINGLE_TOPIC
     )
     @KafkaListener(
-            topics = "${app.kafka.consumer.order-created.topic}",
-            groupId = "${app.kafka.consumer.order-created.group-id}"
+            topics = "${spring.kafka.consumer.topic.order-created}",
+            groupId = "${spring.application.name}"
     )
     public void consume(OrderCreatedEvent event) {
         log.info("Received order-created event: {}", event);
