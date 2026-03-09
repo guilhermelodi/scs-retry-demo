@@ -51,5 +51,6 @@ services:
       echo 'Aguardando Kafka...'
       cub kafka-ready -b kafka:29092 1 30
       kafka-topics --bootstrap-server kafka:29092 --create --if-not-exists --topic order-created --partitions 1 --replication-factor 1
-      echo 'Topico order-created criado.'
+      kafka-topics --bootstrap-server kafka:29092 --create --if-not-exists --topic order-created-dlt --partitions 1 --replication-factor 1
+      echo 'Topicos order-created e order-created-dlt criados.'
       "
