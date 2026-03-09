@@ -1,11 +1,30 @@
 spring:
   application:
     name: scs-retry-demo
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    consumer:
+      group-id: ${spring.application.name}
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.use.type.headers: false
+        spring.json.trusted.packages: com.poc.scsretrydemo
+        spring.json.value.default.type: com.poc.scsretrydemo.OrderCreatedEvent
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      properties:
+        spring.json.use.type.headers: false
+    topic:
+      order-created: order-created
+    listener:
+      missing-topics-fatal: false
   cloud:
     stream:
       defaultBinder: kafka
       bindings:
-        order-created-out-0:
+        orderCreatedProducer-out-0:
           destination: order-created
           contentType: application/json
       kafka:
