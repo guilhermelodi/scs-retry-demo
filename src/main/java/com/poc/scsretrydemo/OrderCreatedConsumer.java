@@ -3,15 +3,14 @@ package com.poc.scsretrydemo;
 import java.util.function.Consumer;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 
 @Slf4j
-@Configuration
-public class OrderCreatedConsumer {
+@Component
+public class OrderCreatedConsumer implements Consumer<OrderCreatedEvent> {
 
-    @Bean
-    public Consumer<OrderCreatedEvent> orderCreatedConsumer() {
-        return event -> log.info("Mensagem consumida do tópico order-created: {}", event);
+    @Override
+    public void accept(OrderCreatedEvent event) {
+        log.info("Mensagem consumida do tópico order-created: {}", event);
     }
 }
