@@ -7,15 +7,15 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
-class OrderCreatedRetryableListenerTest {
+class OrderCreatedConsumerTest {
 
     private final OrderService orderService = mock(OrderService.class);
     private final ObjectMapper objectMapper = new ObjectMapper();
-    private final OrderCreatedRetryableListener listener = new OrderCreatedRetryableListener(orderService, objectMapper);
+    private final OrderCreatedConsumer consumer = new OrderCreatedConsumer(orderService, objectMapper);
 
     @Test
     void shouldProcessOrderWhenPayloadIsValid() {
-        listener.onMessage("""
+        consumer.onMessage("""
                 {
                   "id": 1,
                   "value": 250,
@@ -28,6 +28,6 @@ class OrderCreatedRetryableListenerTest {
 
     @Test
     void shouldThrowWhenPayloadIsInvalid() {
-        assertThrows(IllegalArgumentException.class, () -> listener.onMessage("invalid-json"));
+        assertThrows(IllegalArgumentException.class, () -> consumer.onMessage("invalid-json"));
     }
 }

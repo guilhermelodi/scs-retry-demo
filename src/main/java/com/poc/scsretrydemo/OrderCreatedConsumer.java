@@ -12,12 +12,12 @@ import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
-public class OrderCreatedRetryableListener {
+public class OrderCreatedConsumer {
 
     private final OrderService orderService;
     private final ObjectMapper objectMapper;
 
-    public OrderCreatedRetryableListener(OrderService orderService, ObjectMapper objectMapper) {
+    public OrderCreatedConsumer(OrderService orderService, ObjectMapper objectMapper) {
         this.orderService = orderService;
         this.objectMapper = objectMapper;
     }
@@ -30,7 +30,10 @@ public class OrderCreatedRetryableListener {
             sameIntervalTopicReuseStrategy = SameIntervalTopicReuseStrategy.SINGLE_TOPIC,
             autoCreateTopics = "false"
     )
-    @KafkaListener(topics = "order-created", groupId = "order-created-consumer-group")
+    @KafkaListener(
+            topics = "${spring.kafka.topic.order-created}",
+            groupId = "${spring.application.name}"
+    )
     public void onMessage(String payload) {
         orderService.process(readEvent(payload));
     }
