@@ -1,11 +1,11 @@
 package com.poc.scsretrydemo;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.kafka.annotation.BackOff;
 import org.springframework.kafka.annotation.DltHandler;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.annotation.RetryableTopic;
 import org.springframework.kafka.retrytopic.SameIntervalTopicReuseStrategy;
-import org.springframework.retry.annotation.BackOff;
 import org.springframework.stereotype.Component;
 
 @Slf4j
