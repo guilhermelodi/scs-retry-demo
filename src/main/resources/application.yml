@@ -2,15 +2,31 @@ spring:
   application:
     name: scs-retry-demo
   cloud:
+    function:
+      definition: orderCreatedConsumer
     stream:
       defaultBinder: kafka
       bindings:
         order-created-out-0:
           destination: order-created
           contentType: application/json
+        orderCreatedConsumer-in-0:
+          destination: order-created
+          group: order-created-consumer-group
+          contentType: application/json
+          consumer:
+            max-attempts: 4
+            back-off-initial-interval: 30000
+            back-off-max-interval: 30000
+            back-off-multiplier: 1.0
       kafka:
         binder:
           brokers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+        bindings:
+          orderCreatedConsumer-in-0:
+            consumer:
+              enable-dlq: true
+              dlq-name: order-created-dlt
 
 server:
   port: ${SERVER_PORT:8081}
