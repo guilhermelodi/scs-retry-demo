@@ -1,7 +1,5 @@
 package com.poc.scsretrydemo;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.DltHandler;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -15,11 +13,9 @@ import org.springframework.stereotype.Component;
 public class OrderCreatedConsumer {
 
     private final OrderService orderService;
-    private final ObjectMapper objectMapper;
 
-    public OrderCreatedConsumer(OrderService orderService, ObjectMapper objectMapper) {
+    public OrderCreatedConsumer(OrderService orderService) {
         this.orderService = orderService;
-        this.objectMapper = objectMapper;
     }
 
     @RetryableTopic(
@@ -34,22 +30,15 @@ public class OrderCreatedConsumer {
             topics = "${spring.kafka.topic.order-created}",
             groupId = "${spring.application.name}"
     )
-    public void onMessage(String payload) {
-        orderService.process(readEvent(payload));
+    public void onMessage(OrderCreatedEvent event) {
+        log.info("Evento recebido para consumo: id={}, status={}, value={}",
+                event.id(), event.status(), event.value());
+        orderService.process(event);
     }
 
     @DltHandler
-    public void onDlt(String payload) {
-        OrderCreatedEvent event = readEvent(payload);
+    public void onDlt(OrderCreatedEvent event) {
         log.error("Mensagem enviada para DLT: id={}, status={}, value={}",
                 event.id(), event.status(), event.value());
-    }
-
-    private OrderCreatedEvent readEvent(String payload) {
-        try {
-            return objectMapper.readValue(payload, OrderCreatedEvent.class);
-        } catch (JsonProcessingException exception) {
-            throw new IllegalArgumentException("Payload inválido para OrderCreatedEvent", exception);
-        }
     }
 }
