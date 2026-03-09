@@ -67,16 +67,6 @@ Fluxo de falha:
 
 Para simular erro no processamento, envie `status = "ERROR"`.
 
-## Observabilidade
-
-Foram adicionados logs para:
-
-- início do consumo e origem do tópico;
-- sucesso de processamento;
-- erro no processamento;
-- envio para retry;
-- envio para DLT.
-
 ## Configuração
 
 As propriedades estão em `src/main/resources/application.yml`.
